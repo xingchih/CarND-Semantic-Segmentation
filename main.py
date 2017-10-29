@@ -64,19 +64,23 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
 
     # tf.layers.conv2d(input, num_classes, kernel_size, stride, padding, regulizer)
     # 1x1 convolution, kernel size = 1, and stride = 1
-    conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, 1, padding='same', 
-                kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    vgg_layer7_conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=(1, 1),  
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer7_conv_1x1')
+    vgg_layer4_conv_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, strides=(1, 1),  
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer4_conv_1x1')
+    vgg_layer3_conv_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, strides=(1, 1),
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer3_conv_1x1')
 
     # upsampling, this layer should be the same size as 
     # kernel size = 4, and stride = 2, 
     # output shape should be the same as vgg_layer4_out
-    output   = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2, padding='same', 
+    output   = tf.layers.conv2d_transpose(vgg_layer7_conv_1x1, num_classes, 4, 2, padding='same', 
                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     tf.Print(output, [tf.shape(output)][:])
 
     # add skip layer
-    output = tf.add(output, vgg_layer4_out)
+    output = tf.add(output, vgg_layer4_conv_1x1)
 
     # upsammling by 2 again
     # kernel size = 4, and stride = 2, 
@@ -85,7 +89,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     # add skip layer
-    output = tf.add(output, vgg_layer3_out)
+    output = tf.add(output, vgg_layer3_conv_1x1)
 
     # upsampling by 8
     # kernel size = 16 and stride = 8
@@ -115,8 +119,9 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     cross_entropy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, labels))
     
     # define adam optimizer
+    train_op = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy_loss)
 
-    return None, None, None
+    return logits, cross_entropy_loss, train_op
 tests.test_optimize(optimize)
 
 
