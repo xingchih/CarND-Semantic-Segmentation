@@ -159,6 +159,10 @@ def run():
 
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
+    epochs = 25
+    batch_size = 1
+    lr = 0.0001
+    learning_rate = tf.constant(lr)
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
     # You'll need a GPU with at least 10 teraFLOPS to train on.
@@ -178,6 +182,7 @@ def run():
         # final layer
         layer_output = layers(layer3_out, layer4_out, layer7_out, num_classes)
         # call optimizer
+        logits, cross_entropy_loss, train_op = optimize(nn_last_layer, correct_label, learning_rate, num_classes)
 
         # TODO: Train NN using the train_nn function
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
