@@ -152,7 +152,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
 
         for images, label in get_batches_fn(batch_size):
             # training
-            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: 0.8, learning_rate:0.0001})
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: keep_prob, learning_rate:learning_rate})
             total_loss += loss
             num_images += len(images)
 
@@ -176,10 +176,12 @@ def run():
     helper.maybe_download_pretrained_vgg(data_dir)
     epochs = 25
     batch_size = 1
-    kb = 0.8
-    lr = 0.0001
-    learning_rate = tf.constant(lr)
-    keep_prob = tf.constant(kb)
+    #KEEP_PROBILITY = 0.8
+    #LEARN_RATE = 0.0001
+    #learning_rate = tf.constant(LEARN_RATE)
+    #keep_prob = tf.constant(KEEP_PROBILITY)
+    learning_rate =0.0001
+    keep_prob = 0.8
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
     # You'll need a GPU with at least 10 teraFLOPS to train on.
@@ -195,6 +197,8 @@ def run():
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
         # TODO: Build NN using load_vgg, layers, and optimize function
+        correct_label = tf.placeholder(tf.float32, [None, image_shape[0], image_shape[1], num_classes])
+
         input_image, keep_prob, layer3_out, layer4_out, layer7_out = load_vgg(sess, vgg_path)
         # final layer
         layer_output = layers(layer3_out, layer4_out, layer7_out, num_classes)
