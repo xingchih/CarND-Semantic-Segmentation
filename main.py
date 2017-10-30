@@ -156,7 +156,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
 
         for images, label in get_batches_fn(batch_size):
             # training
-            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: 0.8, learning_rate:0.0001})
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: 0.8, learning_rate:learning_rate})
             total_loss += loss 
             num_images += len(images)
 
@@ -184,7 +184,7 @@ def run():
     #LEARN_RATE = 0.0001
     #learning_rate = tf.constant(LEARN_RATE)
     #keep_prob = tf.constant(KEEP_PROBILITY)
-    learning_rate =0.0001
+    learn_rate = tf.constant(0.0001)
     keep_prob = 0.8
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
@@ -207,11 +207,11 @@ def run():
         # final layer
         layer_output = layers(layer3_out, layer4_out, layer7_out, num_classes)
         # call optimizer
-        logits, train_op, cross_entropy_loss = optimize(layer_output, correct_label, learning_rate, num_classes)
+        logits, train_op, cross_entropy_loss = optimize(layer_output, correct_label, learn_rate, num_classes)
 
         # TODO: Train NN using the train_nn function
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
-             correct_label, keep_prob, learning_rate)
+             correct_label, keep_prob, learn_rate)
 
         # TODO: Save inference data using helper.save_inference_samples
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
