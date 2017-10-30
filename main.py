@@ -121,7 +121,7 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     # define adam optimizer
     train_op = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy_loss)
 
-    return logits, cross_entropy_loss, train_op
+    return logits, train_op, cross_entropy_loss
 tests.test_optimize(optimize)
 
 
@@ -141,11 +141,24 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param learning_rate: TF Placeholder for learning rate
     """
     # TODO: Implement function
-    for epochs in epochs:
-        for images, label in get_batches_fn(batch_size):
-            # training
-            loss = sess.run()
+    for epoch in xrange(epochs):
+        total_loss = 0
+        num_images = 0
+        print("running epochs:", epoch)
+        start_time = time.clock()
 
+        for images, label in get_batches_fn(batch_size):
+            num_images += len(images)
+            # training
+
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: X, correct_label: y, keep_prob: 0.8})
+            total_loss += loss
+
+        total_loss /= num_images
+        end_time = time.clock()
+        training_time = end_time-star_ttime
+        print("epoch {} execution took {} seconds,".format(i, training_time) +
+              " with training loss: {}".format(total_loss))
     pass
 tests.test_train_nn(train_nn)
 
@@ -161,6 +174,7 @@ def run():
     helper.maybe_download_pretrained_vgg(data_dir)
     epochs = 25
     batch_size = 1
+    keep_prob = 0.8
     lr = 0.0001
     learning_rate = tf.constant(lr)
 
@@ -182,7 +196,7 @@ def run():
         # final layer
         layer_output = layers(layer3_out, layer4_out, layer7_out, num_classes)
         # call optimizer
-        logits, cross_entropy_loss, train_op = optimize(nn_last_layer, correct_label, learning_rate, num_classes)
+        logits, train_op, cross_entropy_loss = optimize(nn_last_layer, correct_label, learning_rate, num_classes)
 
         # TODO: Train NN using the train_nn function
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
