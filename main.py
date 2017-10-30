@@ -16,6 +16,7 @@ if not tf.test.gpu_device_name():
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 
+ LEARN_RATE = 0.0001
 
 def load_vgg(sess, vgg_path):
     """
@@ -156,7 +157,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
 
         for images, label in get_batches_fn(batch_size):
             # training
-            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: 0.8, learning_rate:learning_rate})
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: 0.8, learning_rate:LEARN_RATE})
             total_loss += loss 
             num_images += len(images)
 
@@ -181,11 +182,12 @@ def run():
     epochs = 25
     batch_size = 5
     #KEEP_PROBILITY = 0.8
-    #LEARN_RATE = 0.0001
+    #
     #learning_rate = tf.constant(LEARN_RATE)
     #keep_prob = tf.constant(KEEP_PROBILITY)
-    learn_rate = tf.constant(0.0001)
+    learn_rate = tf.constant(LEARN_RATE)
     keep_prob = 0.8
+    #learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
     # You'll need a GPU with at least 10 teraFLOPS to train on.
