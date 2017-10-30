@@ -77,7 +77,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     output   = tf.layers.conv2d_transpose(vgg_layer7_conv_1x1, num_classes, 4, 2, padding='same', 
                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
-    tf.Print(output, [tf.shape(output)][:])
+    #tf.Print(output, [tf.shape(output)][:])
 
     # add skip layer
     output = tf.add(output, vgg_layer4_conv_1x1)
@@ -141,12 +141,13 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param learning_rate: TF Placeholder for learning rate
     """
     # TODO: Implement function
-    start_time = time.clock()
+    
     sess.run(tf.global_variables_initializer())
 
     for epoch in range(epochs):
         total_loss = 0
         num_images = 0
+        start_time = time.clock()
         print("running epochs:", epoch)
         
 
@@ -178,7 +179,7 @@ def run():
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
     epochs = 25
-    batch_size = 1
+    batch_size = 5
     #KEEP_PROBILITY = 0.8
     #LEARN_RATE = 0.0001
     #learning_rate = tf.constant(LEARN_RATE)
