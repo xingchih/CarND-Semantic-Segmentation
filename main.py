@@ -152,7 +152,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
 
         for images, label in get_batches_fn(batch_size):
             # training
-            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: keep_prob})
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: keep_prob, learning_rate:learning_rate})
             total_loss += loss
             num_images += len(images)
 
@@ -176,9 +176,10 @@ def run():
     helper.maybe_download_pretrained_vgg(data_dir)
     epochs = 25
     batch_size = 1
-    keep_prob = 0.8
+    kb = 0.8
     lr = 0.0001
     learning_rate = tf.constant(lr)
+    keep_prob = tf.constant(kb)
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
     # You'll need a GPU with at least 10 teraFLOPS to train on.
