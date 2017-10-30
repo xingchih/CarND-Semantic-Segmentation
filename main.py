@@ -151,18 +151,17 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         
 
         for images, label in get_batches_fn(batch_size):
-            num_images += len(images)
             # training
-
-            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: X, correct_label: y, keep_prob: 0.8})
+            loss, _ = sess.run([cross_entropy_loss, train_op], feed_dict={input_image: images, correct_label: label, keep_prob: keep_prob})
             total_loss += loss
+            num_images += len(images)
 
         total_loss /= num_images
         end_time = time.clock()
-        training_time = end_time-star_ttime
+        training_time = end_time-start_time
         print("epoch {} execution took {} seconds,".format(i, training_time) +
               " with training loss: {}".format(total_loss))
-    pass
+
 tests.test_train_nn(train_nn)
 
 
