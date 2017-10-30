@@ -159,7 +159,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         total_loss /= num_images
         end_time = time.clock()
         training_time = end_time-start_time
-        print("epoch {} execution took {} seconds,".format(i, training_time) +
+        print("epoch {} execution took {} seconds,".format(epoch, training_time) +
               " with training loss: {}".format(total_loss))
 
 tests.test_train_nn(train_nn)
