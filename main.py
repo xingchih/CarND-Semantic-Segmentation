@@ -144,7 +144,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     start_time = time.clock()
     sess.run(tf.global_variables_initializer())
 
-    for epoch in xrange(epochs):
+    for epoch in range(epochs):
         total_loss = 0
         num_images = 0
         print("running epochs:", epoch)
