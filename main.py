@@ -179,7 +179,7 @@ def run():
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
     epochs = 25
-    batch_size = 1
+    batch_size = 5
     #KEEP_PROBILITY = 0.8
     #LEARN_RATE = 0.0001
     #learning_rate = tf.constant(LEARN_RATE)
