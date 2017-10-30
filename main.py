@@ -16,7 +16,7 @@ if not tf.test.gpu_device_name():
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 
- LEARN_RATE = 0.0001
+LEARN_RATE = 0.0001
 
 def load_vgg(sess, vgg_path):
     """
