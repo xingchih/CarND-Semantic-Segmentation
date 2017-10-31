@@ -66,9 +66,12 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # tf.layers.conv2d(input, num_classes, kernel_size, stride, padding, regulizer)
     # 1x1 convolution, kernel size = 1, and stride = 1
     vgg_layer7_conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=(1, 1),  
-        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer7_conv_1x1')
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), 
+        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), name='vgg_layer7_conv_1x1')
+
     vgg_layer4_conv_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, strides=(1, 1),  
         padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer4_conv_1x1')
+
     vgg_layer3_conv_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, strides=(1, 1),
         padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer3_conv_1x1')
 
