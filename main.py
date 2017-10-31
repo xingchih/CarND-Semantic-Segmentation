@@ -70,10 +70,12 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
         kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), name='vgg_layer7_conv_1x1')
 
     vgg_layer4_conv_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, strides=(1, 1),  
-        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer4_conv_1x1')
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), 
+        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), name='vgg_layer4_conv_1x1')
 
     vgg_layer3_conv_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, strides=(1, 1),
-        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), name='vgg_layer3_conv_1x1')
+        padding='same',  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3), 
+        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), name='vgg_layer3_conv_1x1')
 
     # upsampling, this layer should be the same size as 
     # kernel size = 4, and stride = 2, 
@@ -189,7 +191,7 @@ def run():
     #learning_rate = tf.constant(LEARN_RATE)
     #keep_prob = tf.constant(KEEP_PROBILITY)
     learn_rate = tf.constant(LEARN_RATE)
-    keep_prob = 0.8
+    keep_prob = 0.75
     #learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
     # OPTIONAL: Train and Inference on the cityscapes dataset instead of the Kitti dataset.
